@@ -44,7 +44,7 @@ class Socket
 
 Socket::Socket(int s){socket_ = s;}
 Socket::Socket(const char* type){
-    if(type=="TCP"){
+    if(strcmp(type, "TCP") == 0){
     if((socket_ = socket(AF_INET, SOCK_STREAM, 0)) == -1)
     {
         perror("Socket setup error");
@@ -52,7 +52,7 @@ Socket::Socket(const char* type){
     }
     }
     else{
-        if(type=="UDP"){
+        if(strcmp(type, "UDP") == 0){
             if((socket_ = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
             {
                 perror("Socket setup error");
@@ -64,6 +64,7 @@ Socket::Socket(const char* type){
 
 int Socket::Set_(int s){
     socket_ = s;
+    return(0);
 }
 
 int Socket::Bind_(struct sockaddr_in addr){
@@ -79,6 +80,7 @@ int Socket::Listen_(int port){
         perror("Listen error");
         exit(1);
     }
+    return (0);
 }
 
 int Socket::Accept_(struct sockaddr_in *addr_dist, socklen_t sin_size){
@@ -95,6 +97,7 @@ int Socket::Connect_(struct sockaddr_in addr_dist){
         perror("Connection failed");
         exit(1);
     }
+    return (0);
 }
 
 int Socket::Recv_(char *msg){
@@ -103,12 +106,14 @@ int Socket::Recv_(char *msg){
         perror("Recv");
     }
     // msg = msg_;
+    return (0);
 }
 
 int Socket::Send_(const char* msg){
     if(send(socket_, msg, MAX_LEN, 0) == -1){
         perror("Send error");
     }
+    return (0);
 }
 
 int Socket::Sendto_(const char *msg, struct sockaddr_in their_addr, int tolen){
@@ -116,6 +121,7 @@ int Socket::Sendto_(const char *msg, struct sockaddr_in their_addr, int tolen){
         perror("Send error");
         return(-1);
     }
+    return (0);
 }
 
 int Socket::Recvfrom_(char *msg, struct sockaddr_in *addr_their, socklen_t addr_len){
@@ -123,6 +129,7 @@ int Socket::Recvfrom_(char *msg, struct sockaddr_in *addr_their, socklen_t addr_
         perror("Send error");
         return(-1);
     }
+    return (0);
 }
 
 int Socket::Close_(void){
@@ -151,6 +158,7 @@ int set_random_port(){
     addr.sin_port = 0;
     cache.Bind_(addr);
     result = cache.Getsockname_();
+    return (0);
 }
 
 int set_addr_in(struct sockaddr_in& p, int family, int port, in_addr_t addr){
@@ -162,6 +170,7 @@ int set_addr_in(struct sockaddr_in& p, int family, int port, in_addr_t addr){
     p.sin_port = port;
     p.sin_addr.s_addr = addr;
     bzero(&(p.sin_zero),sizeof(p.sin_zero));
+    return 0;
 }
 
 int decode_msg(const char msg[], char* buf[]){
@@ -178,4 +187,5 @@ int decode_msg(const char msg[], char* buf[]){
         strcpy(buf[i], p);
         i++;
     }
+    return (0);
 }
